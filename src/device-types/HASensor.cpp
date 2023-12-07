@@ -21,7 +21,7 @@ bool HASensor::setValue(const char* value)
 
 void HASensor::buildSerializer()
 {
-    if (_serializer || !uniqueId()) {
+    if (_serializer || !objectId()) {
         return;
     }
 
@@ -48,7 +48,7 @@ void HASensor::buildSerializer()
 
 void HASensor::onMqttConnected()
 {
-    if (!uniqueId()) {
+    if (!objectId()) {
         return;
     }
 

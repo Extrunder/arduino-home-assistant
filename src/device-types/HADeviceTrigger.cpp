@@ -62,7 +62,7 @@ bool HADeviceTrigger::trigger()
 
 void HADeviceTrigger::buildSerializer()
 {
-    if (_serializer || !uniqueId()) {
+    if (_serializer || !objectId()) {
         return;
     }
 
@@ -92,7 +92,7 @@ void HADeviceTrigger::buildSerializer()
 
 void HADeviceTrigger::onMqttConnected()
 {
-    if (!uniqueId()) {
+    if (!objectId()) {
         return;
     }
 

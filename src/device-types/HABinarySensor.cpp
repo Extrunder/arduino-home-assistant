@@ -29,7 +29,7 @@ bool HABinarySensor::setState(const bool state, const bool force)
 
 void HABinarySensor::buildSerializer()
 {
-    if (_serializer || !uniqueId()) {
+    if (_serializer || !objectId()) {
         return;
     }
 
@@ -45,7 +45,7 @@ void HABinarySensor::buildSerializer()
 
 void HABinarySensor::onMqttConnected()
 {
-    if (!uniqueId()) {
+    if (!objectId()) {
         return;
     }
 

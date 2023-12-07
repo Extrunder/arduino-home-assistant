@@ -16,7 +16,7 @@ HAButton::HAButton(const char* uniqueId) :
 
 void HAButton::buildSerializer()
 {
-    if (_serializer || !uniqueId()) {
+    if (_serializer || !objectId()) {
         return;
     }
 
@@ -42,13 +42,13 @@ void HAButton::buildSerializer()
 
 void HAButton::onMqttConnected()
 {
-    if (!uniqueId()) {
+    if (!objectId()) {
         return;
     }
 
     publishConfig();
     publishAvailability();
-    subscribeTopic(uniqueId(), AHATOFSTR(HACommandTopic));
+    subscribeTopic(objectId(), AHATOFSTR(HACommandTopic));
 }
 
 void HAButton::onMqttMessage(
@@ -62,7 +62,7 @@ void HAButton::onMqttMessage(
 
     if (_commandCallback && HASerializer::compareDataTopics(
         topic,
-        uniqueId(),
+        objectId(),
         AHATOFSTR(HACommandTopic)
     )) {
         _commandCallback(this);

@@ -15,7 +15,7 @@ HAScene::HAScene(const char* uniqueId) :
 
 void HAScene::buildSerializer()
 {
-    if (_serializer || !uniqueId()) {
+    if (_serializer || !objectId()) {
         return;
     }
 
@@ -46,13 +46,13 @@ void HAScene::buildSerializer()
 
 void HAScene::onMqttConnected()
 {
-    if (!uniqueId()) {
+    if (!objectId()) {
         return;
     }
 
     publishConfig();
     publishAvailability();
-    subscribeTopic(uniqueId(), AHATOFSTR(HACommandTopic));
+    subscribeTopic(objectId(), AHATOFSTR(HACommandTopic));
 }
 
 void HAScene::onMqttMessage(
@@ -66,7 +66,7 @@ void HAScene::onMqttMessage(
 
     if (_commandCallback && HASerializer::compareDataTopics(
         topic,
-        uniqueId(),
+        objectId(),
         AHATOFSTR(HACommandTopic)
     )) {
         _commandCallback(this);

@@ -30,11 +30,11 @@ public:
      * @param componentName The name of the Home Assistant component (e.g. `binary_sensor`).
      *                      You can find all available component names in the Home Assistant documentation.
      *                      The component name needs to be stored in the flash memory.
-     * @param uniqueId The unique ID of the device type. It needs to be unique in a scope of the HADevice.
+     * @param objectId The object ID of the device type. It needs to be unique in a scope of the HADevice.
      */
     HABaseDeviceType(
         const __FlashStringHelper* componentName,
-        const char* uniqueId
+        const char* objectId
     );
 
     /**
@@ -42,6 +42,12 @@ public:
      */
     inline const char* uniqueId() const
         { return _uniqueId; }
+
+    /**
+     * Returns object ID of the device type.
+     */
+    inline const char* objectId() const
+        { return _objectId; }
 
     /**
      * Returns component name defined by the device type.
@@ -105,11 +111,11 @@ protected:
     /**
      * Subscribes to the given data topic.
      *
-     * @param uniqueId THe unique ID of the device type assigned via the constructor.
+     * @param objectId THe unique ID of the device type assigned via the constructor.
      * @param topic Topic to subscribe (progmem string).
      */
     static void subscribeTopic(
-        const char* uniqueId,
+        const char* objectId,
         const __FlashStringHelper* topic
     );
 
@@ -205,6 +211,9 @@ protected:
 
     /// The unique ID that was assigned via the constructor.
     const char* _uniqueId;
+
+    /// The object ID that was assigned via the constructor.
+    const char* _objectId;
 
     /// The name that was set using setName method. It can be nullptr.
     const char* _name;

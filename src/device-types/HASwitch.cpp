@@ -32,7 +32,7 @@ bool HASwitch::setState(const bool state, const bool force)
 
 void HASwitch::buildSerializer()
 {
-    if (_serializer || !uniqueId()) {
+    if (_serializer || !objectId()) {
         return;
     }
 
@@ -67,7 +67,7 @@ void HASwitch::buildSerializer()
 
 void HASwitch::onMqttConnected()
 {
-    if (!uniqueId()) {
+    if (!objectId()) {
         return;
     }
 
@@ -78,7 +78,7 @@ void HASwitch::onMqttConnected()
         publishState(_currentState);
     }
 
-    subscribeTopic(uniqueId(), AHATOFSTR(HACommandTopic));
+    subscribeTopic(objectId(), AHATOFSTR(HACommandTopic));
 }
 
 void HASwitch::onMqttMessage(
@@ -91,7 +91,7 @@ void HASwitch::onMqttMessage(
 
     if (_commandCallback && HASerializer::compareDataTopics(
         topic,
-        uniqueId(),
+        objectId(),
         AHATOFSTR(HACommandTopic)
     )) {
         bool state = length == strlen_P(HAStateOn);

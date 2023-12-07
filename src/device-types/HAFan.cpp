@@ -51,7 +51,7 @@ bool HAFan::setSpeed(const uint16_t speed, const bool force)
 
 void HAFan::buildSerializer()
 {
-    if (_serializer || !uniqueId()) {
+    if (_serializer || !objectId()) {
         return;
     }
 
@@ -105,7 +105,7 @@ void HAFan::buildSerializer()
 
 void HAFan::onMqttConnected()
 {
-    if (!uniqueId()) {
+    if (!objectId()) {
         return;
     }
 
@@ -117,10 +117,10 @@ void HAFan::onMqttConnected()
         publishSpeed(_currentSpeed);
     }
 
-    subscribeTopic(uniqueId(), AHATOFSTR(HACommandTopic));
+    subscribeTopic(objectId(), AHATOFSTR(HACommandTopic));
 
     if (_features & SpeedsFeature) {
-        subscribeTopic(uniqueId(), AHATOFSTR(HAPercentageCommandTopic));
+        subscribeTopic(objectId(), AHATOFSTR(HAPercentageCommandTopic));
     }
 }
 
@@ -132,13 +132,13 @@ void HAFan::onMqttMessage(
 {
     if (HASerializer::compareDataTopics(
         topic,
-        uniqueId(),
+        objectId(),
         AHATOFSTR(HACommandTopic)
     )) {
         handleStateCommand(payload, length);
     } else if (HASerializer::compareDataTopics(
         topic,
-        uniqueId(),
+        objectId(),
         AHATOFSTR(HAPercentageCommandTopic)
     )) {
         handleSpeedCommand(payload, length);

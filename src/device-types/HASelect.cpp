@@ -87,7 +87,7 @@ bool HASelect::setState(const int8_t state, const bool force)
 
 void HASelect::buildSerializer()
 {
-    if (_serializer || !uniqueId() || !_options) {
+    if (_serializer || !objectId() || !_options) {
         return;
     }
 
@@ -125,7 +125,7 @@ void HASelect::buildSerializer()
 
 void HASelect::onMqttConnected()
 {
-    if (!uniqueId()) {
+    if (!objectId()) {
         return;
     }
 
@@ -136,7 +136,7 @@ void HASelect::onMqttConnected()
         publishState(_currentState);
     }
 
-    subscribeTopic(uniqueId(), AHATOFSTR(HACommandTopic));
+    subscribeTopic(objectId(), AHATOFSTR(HACommandTopic));
 }
 
 void HASelect::onMqttMessage(
@@ -147,7 +147,7 @@ void HASelect::onMqttMessage(
 {
     if (_commandCallback && HASerializer::compareDataTopics(
         topic,
-        uniqueId(),
+        objectId(),
         AHATOFSTR(HACommandTopic)
     )) {
         const uint8_t optionsNb = _options->getItemsNb();

@@ -179,7 +179,7 @@ bool HAHVAC::setTargetTemperature(const HANumeric& temperature, const bool force
 
 void HAHVAC::buildSerializer()
 {
-    if (_serializer || !uniqueId()) {
+    if (_serializer || !objectId()) {
         return;
     }
 
@@ -355,7 +355,7 @@ void HAHVAC::buildSerializer()
 
 void HAHVAC::onMqttConnected()
 {
-    if (!uniqueId()) {
+    if (!objectId()) {
         return;
     }
 
@@ -373,27 +373,27 @@ void HAHVAC::onMqttConnected()
     }
 
     if (_features & AuxHeatingFeature) {
-        subscribeTopic(uniqueId(), AHATOFSTR(HAAuxCommandTopic));
+        subscribeTopic(objectId(), AHATOFSTR(HAAuxCommandTopic));
     }
 
     if (_features & PowerFeature) {
-        subscribeTopic(uniqueId(), AHATOFSTR(HAPowerCommandTopic));
+        subscribeTopic(objectId(), AHATOFSTR(HAPowerCommandTopic));
     }
 
     if (_features & FanFeature) {
-        subscribeTopic(uniqueId(), AHATOFSTR(HAFanModeCommandTopic));
+        subscribeTopic(objectId(), AHATOFSTR(HAFanModeCommandTopic));
     }
 
     if (_features & SwingFeature) {
-        subscribeTopic(uniqueId(), AHATOFSTR(HASwingModeCommandTopic));
+        subscribeTopic(objectId(), AHATOFSTR(HASwingModeCommandTopic));
     }
 
     if (_features & ModesFeature) {
-        subscribeTopic(uniqueId(), AHATOFSTR(HAModeCommandTopic));
+        subscribeTopic(objectId(), AHATOFSTR(HAModeCommandTopic));
     }
 
     if (_features & TargetTemperatureFeature) {
-        subscribeTopic(uniqueId(), AHATOFSTR(HATemperatureCommandTopic));
+        subscribeTopic(objectId(), AHATOFSTR(HATemperatureCommandTopic));
     }
 }
 
@@ -405,37 +405,37 @@ void HAHVAC::onMqttMessage(
 {
     if (HASerializer::compareDataTopics(
         topic,
-        uniqueId(),
+        objectId(),
         AHATOFSTR(HAAuxCommandTopic)
     )) {
         handleAuxStateCommand(payload, length);
     } else if (HASerializer::compareDataTopics(
         topic,
-        uniqueId(),
+        objectId(),
         AHATOFSTR(HAPowerCommandTopic)
     )) {
         handlePowerCommand(payload, length);
     } else if (HASerializer::compareDataTopics(
         topic,
-        uniqueId(),
+        objectId(),
         AHATOFSTR(HAFanModeCommandTopic)
     )) {
         handleFanModeCommand(payload, length);
     } else if (HASerializer::compareDataTopics(
         topic,
-        uniqueId(),
+        objectId(),
         AHATOFSTR(HASwingModeCommandTopic)
     )) {
         handleSwingModeCommand(payload, length);
     } else if (HASerializer::compareDataTopics(
         topic,
-        uniqueId(),
+        objectId(),
         AHATOFSTR(HAModeCommandTopic)
     )) {
         handleModeCommand(payload, length);
     } else if (HASerializer::compareDataTopics(
         topic,
-        uniqueId(),
+        objectId(),
         AHATOFSTR(HATemperatureCommandTopic)
     )) {
         handleTargetTemperatureCommand(payload, length);

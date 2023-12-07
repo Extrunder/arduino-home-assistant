@@ -38,7 +38,7 @@ bool HANumber::setState(const HANumeric& state, const bool force)
 
 void HANumber::buildSerializer()
 {
-    if (_serializer || !uniqueId()) {
+    if (_serializer || !objectId()) {
         return;
     }
 
@@ -108,7 +108,7 @@ void HANumber::buildSerializer()
 
 void HANumber::onMqttConnected()
 {
-    if (!uniqueId()) {
+    if (!objectId()) {
         return;
     }
 
@@ -119,7 +119,7 @@ void HANumber::onMqttConnected()
         publishState(_currentState);
     }
 
-    subscribeTopic(uniqueId(), AHATOFSTR(HACommandTopic));
+    subscribeTopic(objectId(), AHATOFSTR(HACommandTopic));
 }
 
 void HANumber::onMqttMessage(
@@ -130,7 +130,7 @@ void HANumber::onMqttMessage(
 {
     if (HASerializer::compareDataTopics(
         topic,
-        uniqueId(),
+        objectId(),
         AHATOFSTR(HACommandTopic)
     )) {
         handleCommand(payload, length);

@@ -6,10 +6,11 @@
 
 HABaseDeviceType::HABaseDeviceType(
     const __FlashStringHelper* componentName,
-    const char* uniqueId
+    const char* objectId
 ) :
     _componentName(componentName),
-    _uniqueId(uniqueId),
+    _uniqueId(nullptr),
+    _objectId(objectId),
     _name(nullptr),
     _serializer(nullptr),
     _availability(AvailabilityDefault)
@@ -31,12 +32,12 @@ HAMqtt* HABaseDeviceType::mqtt()
 }
 
 void HABaseDeviceType::subscribeTopic(
-    const char* uniqueId,
+    const char* objectId,
     const __FlashStringHelper* topic
 )
 {
     const uint16_t topicLength = HASerializer::calculateDataTopicLength(
-        uniqueId,
+        objectId,
         topic
     );
     if (topicLength == 0) {
@@ -46,7 +47,7 @@ void HABaseDeviceType::subscribeTopic(
     char fullTopic[topicLength];
     if (!HASerializer::generateDataTopic(
         fullTopic,
-        uniqueId,
+        objectId,
         topic
     )) {
         return;
@@ -76,6 +77,19 @@ void HABaseDeviceType::destroySerializer()
 
 void HABaseDeviceType::publishConfig()
 {
+    if (!_uniqueId) {
+        const HADevice* device = mqtt()->getDevice();
+        if (device == nullptr) {
+            return;
+        }
+        const char* deviceUniqueId = device->getUniqueId();
+        char* uniqueId = new char[strlen(_objectId) + 1 + strlen(deviceUniqueId) + 1];
+        strcpy_P(uniqueId, _objectId);
+        strcat_P(uniqueId, HASerializerUnderscore);
+        strcat_P(uniqueId, deviceUniqueId);
+        _uniqueId = uniqueId;
+    }
+
     buildSerializer();
 
     if (_serializer == nullptr) {
@@ -84,7 +98,7 @@ void HABaseDeviceType::publishConfig()
 
     const uint16_t topicLength = HASerializer::calculateConfigTopicLength(
         componentName(),
-        uniqueId()
+        objectId()
     );
     const uint16_t dataLength = _serializer->calculateSize();
 
@@ -93,7 +107,7 @@ void HABaseDeviceType::publishConfig()
         HASerializer::generateConfigTopic(
             topic,
             componentName(),
-            uniqueId()
+            objectId()
         );
 
         if (mqtt()->beginPublish(topic, dataLength, true)) {
@@ -175,7 +189,7 @@ bool HABaseDeviceType::publishOnDataTopic(
     }
 
     const uint16_t topicLength = HASerializer::calculateDataTopicLength(
-        uniqueId(),
+        objectId(),
         topic
     );
     if (topicLength == 0) {
@@ -185,7 +199,7 @@ bool HABaseDeviceType::publishOnDataTopic(
     char fullTopic[topicLength];
     if (!HASerializer::generateDataTopic(
         fullTopic,
-        uniqueId(),
+        objectId(),
         topic
     )) {
         return false;

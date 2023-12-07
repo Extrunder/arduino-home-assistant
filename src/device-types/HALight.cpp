@@ -124,7 +124,7 @@ bool HALight::setRGBColor(const RGBColor& color, const bool force)
 
 void HALight::buildSerializer()
 {
-    if (_serializer || !uniqueId()) {
+    if (_serializer || !objectId()) {
         return;
     }
 
@@ -196,7 +196,7 @@ void HALight::buildSerializer()
 
 void HALight::onMqttConnected()
 {
-    if (!uniqueId()) {
+    if (!objectId()) {
         return;
     }
 
@@ -210,18 +210,18 @@ void HALight::onMqttConnected()
         publishRGBColor(_currentRGBColor);
     }
 
-    subscribeTopic(uniqueId(), AHATOFSTR(HACommandTopic));
+    subscribeTopic(objectId(), AHATOFSTR(HACommandTopic));
 
     if (_features & BrightnessFeature) {
-        subscribeTopic(uniqueId(), AHATOFSTR(HABrightnessCommandTopic));
+        subscribeTopic(objectId(), AHATOFSTR(HABrightnessCommandTopic));
     }
 
     if (_features & ColorTemperatureFeature) {
-        subscribeTopic(uniqueId(), AHATOFSTR(HAColorTemperatureCommandTopic));
+        subscribeTopic(objectId(), AHATOFSTR(HAColorTemperatureCommandTopic));
     }
 
     if (_features & RGBFeature) {
-        subscribeTopic(uniqueId(), AHATOFSTR(HARGBCommandTopic));
+        subscribeTopic(objectId(), AHATOFSTR(HARGBCommandTopic));
     }
 }
 
@@ -233,26 +233,26 @@ void HALight::onMqttMessage(
 {
     if (HASerializer::compareDataTopics(
         topic,
-        uniqueId(),
+        objectId(),
         AHATOFSTR(HACommandTopic)
     )) {
         handleStateCommand(payload, length);
     } else if (HASerializer::compareDataTopics(
         topic,
-        uniqueId(),
+        objectId(),
         AHATOFSTR(HABrightnessCommandTopic)
     )) {
         handleBrightnessCommand(payload, length);
     } else if (HASerializer::compareDataTopics(
         topic,
-        uniqueId(),
+        objectId(),
         AHATOFSTR(HAColorTemperatureCommandTopic)
     )) {
         handleColorTemperatureCommand(payload, length);
     } else if (
         HASerializer::compareDataTopics(
             topic,
-            uniqueId(),
+            objectId(),
             AHATOFSTR(HARGBCommandTopic)
         )
     ) {

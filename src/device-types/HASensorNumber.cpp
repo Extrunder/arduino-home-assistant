@@ -34,7 +34,7 @@ bool HASensorNumber::setValue(const HANumeric& value, const bool force)
 
 void HASensorNumber::onMqttConnected()
 {
-    if (!uniqueId()) {
+    if (!objectId()) {
         return;
     }
 

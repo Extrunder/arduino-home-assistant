@@ -21,7 +21,7 @@ bool HATagScanner::tagScanned(const char* tag)
 
 void HATagScanner::buildSerializer()
 {
-    if (_serializer || !uniqueId()) {
+    if (_serializer || !objectId()) {
         return;
     }
 
@@ -32,7 +32,7 @@ void HATagScanner::buildSerializer()
 
 void HATagScanner::onMqttConnected()
 {
-    if (!uniqueId()) {
+    if (!objectId()) {
         return;
     }
 

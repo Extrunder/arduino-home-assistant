@@ -50,7 +50,7 @@ bool HACover::setPosition(const int16_t position, const bool force)
 
 void HACover::buildSerializer()
 {
-    if (_serializer || !uniqueId()) {
+    if (_serializer || !objectId()) {
         return;
     }
 
@@ -88,7 +88,7 @@ void HACover::buildSerializer()
 
 void HACover::onMqttConnected()
 {
-    if (!uniqueId()) {
+    if (!objectId()) {
         return;
     }
 
@@ -100,7 +100,7 @@ void HACover::onMqttConnected()
         publishPosition(_currentPosition);
     }
 
-    subscribeTopic(uniqueId(), AHATOFSTR(HACommandTopic));
+    subscribeTopic(objectId(), AHATOFSTR(HACommandTopic));
 }
 
 void HACover::onMqttMessage(
@@ -111,7 +111,7 @@ void HACover::onMqttMessage(
 {
     if (HASerializer::compareDataTopics(
         topic,
-        uniqueId(),
+        objectId(),
         AHATOFSTR(HACommandTopic)
     )) {
         handleCommand(payload, length);

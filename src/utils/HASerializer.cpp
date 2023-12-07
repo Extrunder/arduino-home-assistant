@@ -324,7 +324,7 @@ uint16_t HASerializer::calculateTopicEntrySize(
         }
 
         size += calculateDataTopicLength(
-            _deviceType->uniqueId(),
+            _deviceType->objectId(),
             entry->property
         ) - 1; // exclude null terminator
     }
@@ -487,7 +487,7 @@ bool HASerializer::flushTopic(const SerializerEntry* entry) const
         mqtt->writePayload(topic, strlen(topic));
     } else {
         const uint16_t length = calculateDataTopicLength(
-            _deviceType->uniqueId(),
+            _deviceType->objectId(),
             entry->property
         );
         if (length == 0) {
@@ -497,7 +497,7 @@ bool HASerializer::flushTopic(const SerializerEntry* entry) const
         char topic[length];
         generateDataTopic(
             topic,
-            _deviceType->uniqueId(),
+            _deviceType->objectId(),
             entry->property
         );
 

@@ -29,7 +29,7 @@ bool HADeviceTracker::setState(const TrackerState state, const bool force)
 
 void HADeviceTracker::buildSerializer()
 {
-    if (_serializer || !uniqueId()) {
+    if (_serializer || !objectId()) {
         return;
     }
 
@@ -49,7 +49,7 @@ void HADeviceTracker::buildSerializer()
 
 void HADeviceTracker::onMqttConnected()
 {
-    if (!uniqueId()) {
+    if (!objectId()) {
         return;
     }
 

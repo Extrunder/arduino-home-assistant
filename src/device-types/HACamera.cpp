@@ -23,7 +23,7 @@ bool HACamera::publishImage(const uint8_t* data, const uint16_t length)
 
 void HACamera::buildSerializer()
 {
-    if (_serializer || !uniqueId()) {
+    if (_serializer || !objectId()) {
         return;
     }
 
@@ -43,7 +43,7 @@ void HACamera::buildSerializer()
 
 void HACamera::onMqttConnected()
 {
-    if (!uniqueId()) {
+    if (!objectId()) {
         return;
     }
 

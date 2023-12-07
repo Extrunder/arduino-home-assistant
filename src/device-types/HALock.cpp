@@ -31,7 +31,7 @@ bool HALock::setState(const LockState state, const bool force)
 
 void HALock::buildSerializer()
 {
-    if (_serializer || !uniqueId()) {
+    if (_serializer || !objectId()) {
         return;
     }
 
@@ -64,7 +64,7 @@ void HALock::buildSerializer()
 
 void HALock::onMqttConnected()
 {
-    if (!uniqueId()) {
+    if (!objectId()) {
         return;
     }
 
@@ -75,7 +75,7 @@ void HALock::onMqttConnected()
         publishState(_currentState);
     }
 
-    subscribeTopic(uniqueId(), AHATOFSTR(HACommandTopic));
+    subscribeTopic(objectId(), AHATOFSTR(HACommandTopic));
 }
 
 void HALock::onMqttMessage(
@@ -86,7 +86,7 @@ void HALock::onMqttMessage(
 {
     if (HASerializer::compareDataTopics(
         topic,
-        uniqueId(),
+        objectId(),
         AHATOFSTR(HACommandTopic)
     )) {
         handleCommand(payload, length);
